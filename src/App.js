@@ -1,4 +1,3 @@
-import logo from './logo.svg'
 import './App.css'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
@@ -9,31 +8,27 @@ const App = () => {
 
   const url = 'https://jsonplaceholder.typicode.com/posts'
 
-  const fetchData = async url => {
+  const fetchData = async (url, reversed = false) => {
     const res = await axios.get(url)
     const data = await res.data
-    return data
+    return reversed ? data.reverse() : data
   }
 
   const toggleSort = () => (sort === 'asc' ? setSort('desc') : setSort('asc'))
 
   const handleSort = () => {
     toggleSort()
-    sort === 'asc' ? setData(data.sort()) : setData(data.reverse())
-    sort === 'desc' ? setData(data.sort()) : setData(data.reverse())
-    // setData(data.sort((a, b) => (sort === 'asc' ? 1 : -1)))
-    console.log(data)
+    sort === 'asc' ? handleData(url) : handleData(url, true)
+    sort === 'desc' ? handleData(url) : handleData(url, true)
   }
 
-  console.log(sort)
-
-  const handleData = async () => {
-    const data = await fetchData(url)
+  const handleData = async (url, reversed = false) => {
+    const data = await fetchData(url, reversed)
     setData(data)
   }
 
   useEffect(() => {
-    handleData()
+    handleData(url)
   }, [])
 
   // console.log(data)
